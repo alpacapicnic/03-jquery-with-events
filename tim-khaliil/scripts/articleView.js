@@ -40,14 +40,14 @@ articleView.handleAuthorFilter = function() {
     if ($(this).val()) {
       // TODO: If the <select> menu was changed to an option that has a value, we first need to hide all the articles, and then show just the ones that match for the author that was selected.
       // Use an "attribute selector" to find those articles, and fade them in for the reader.
-      $('articles').hide();
-      $('#author-filter').fadeId(150);
+      $('article').fadeOut(250);
+      $(`article[data-author="${$(this).val()}"]`).fadeIn(750);
 
     } else {
       // TODO: If the <select> menu was changed to an option that is blank, we should first show all the articles, except the one article we are using as a template.
       //.show()
-      $('.template').hide();
-      $('articles').fadeIn(150);
+      $('article').fadeIn(250);
+      $('.template').show();
     }
     $('#category-filter').val('');
   });
@@ -60,12 +60,12 @@ articleView.handleCategoryFilter = function() {
   // When the blank (default) option is selected, show all the articles, except for the template.
   // Be sure to reset the #author-filter while you are at it!
     if ($(this).val()) {
-      $('articles').hide();
-      $('#category-filter').fadeId(150);
+      $('article').hide();
+      $(`article[data-category="${$(this).val()}"]`).fadeIn(750);
 
     } else {
-      $('.template').hide();
-      $('articles').fadeId(150);
+      $('article').fadeIn(250);
+      $('.template').show();
     }
     $('#author-filter').val('');
   });
@@ -78,6 +78,8 @@ articleView.handleMainNav = function() {
   $('.tab').on('click', function(e) {
     e.preventDefault();
     $('.tab-content').hide();
+    $('#' + $(this).data('content')).fadeIn();
+
 
 
   });
@@ -91,9 +93,22 @@ articleView.setTeasers = function() {
 
   // TODO: Add an event handler to reveal all the hidden elements, when the .read-on link is clicked. You can go ahead and hide the "Read On" link once it has been clicked. Be sure to prevent the default link-click action!
   // Ideally, we'd attach this as just one event handler on the #articles section, and let it process (in other words... delegate) any .read-on clicks that happen within child nodes.
+
+  $('.read-on').on('click', function(o) {
+    o.preventDefault;
+    // console.log($(this).parent());
+    
+    $(this).parent().find('*').show();
+  });
+
 };
 
 // TODO: Call all of the above functions, once we are sure the DOM is ready.
 $(document).ready(function() {
+  articleView.populateFilters();
+  articleView.handleAuthorFilter();
+  articleView.handleCategoryFilter();
+  articleView.handleMainNav();
+  articleView.setTeasers();
 
 })
